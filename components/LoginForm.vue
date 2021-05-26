@@ -13,6 +13,7 @@
       :type="form.password.show ? 'text' : 'password'"
       label="Password"
       @click:append="togglePasswordVisibility()"
+      required
     ></v-text-field>
     <v-btn :disabled="!valid" color="success" class="mt-4" block @click="login">
       LOGIN
@@ -31,18 +32,11 @@ export default {
     form: {
       password: {
         value: '',
-        rules: [
-          (v) => !!v || 'Password is required',
-          (v) =>
-            (v && v.length >= 10) || 'Password must be more than 10 characters',
-        ],
+        rules: [(v) => !!v || 'Field is required'],
       },
       email: {
         value: '',
-        rules: [
-          (v) => !!v || 'E-mail is required',
-          (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        ],
+        rules: [(v) => !!v || 'Field is required'],
         show: false,
       },
     },
@@ -51,13 +45,28 @@ export default {
     validate() {
       return this.$refs.form.validate()
     },
-    login() {
+    async login() {
       if (this.validate()) {
         const formData = {}
         Object.keys(this.form).forEach(
           (key) => (formData[key] = this.form[key].value)
         )
         console.log(formData)
+        await this.$fire.authReady()
+        await this.$fire.auth
+          .signInWithEmailAndPassword(formData.email, formData.password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user
+            console.log(user)
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code
+            const errorMessage = error.message
+            console.log(errorCode, errorMessage)
+            // ..
+          })
       }
     },
     togglePasswordVisibility() {

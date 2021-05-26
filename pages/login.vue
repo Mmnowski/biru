@@ -38,9 +38,14 @@ export default {
     isOnline: false,
   }),
   mounted() {
+    if (this.$nuxt._route.params.showForm) this.loginSelected = true
     window.addEventListener('online', this.checkConnection)
     window.addEventListener('offline', this.checkConnection)
     this.checkConnection()
+  },
+  beforeDestroy() {
+    window.removeEventListener('online', this.checkConnection)
+    window.removeEventListener('offline', this.checkConnection)
   },
   methods: {
     checkConnection() {
