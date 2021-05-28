@@ -26,6 +26,9 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import pick from 'lodash/pick'
+
 export default {
   data: () => ({
     valid: true,
@@ -42,6 +45,9 @@ export default {
     },
   }),
   methods: {
+    ...mapMutations({
+      setAccount: 'user/setAccount',
+    }),
     validate() {
       return this.$refs.form.validate()
     },
@@ -56,16 +62,15 @@ export default {
         await this.$fire.auth
           .signInWithEmailAndPassword(formData.email, formData.password)
           .then((userCredential) => {
-            // Signed in
             const user = userCredential.user
-            console.log(user)
-            // ...
+            // TODO Retrieve all useful properties from firebase obj
+            this.setAccount(pick(user, ['email', 'displayName']))
+            this.$router.push('/')
           })
           .catch((error) => {
             const errorCode = error.code
             const errorMessage = error.message
             console.log(errorCode, errorMessage)
-            // ..
           })
       }
     },
