@@ -80,7 +80,7 @@ export default {
     },
     getServerUrl() {
       // TODO Add env based base url
-      return window.location.origin
+      return process.env.BIRU_BASE_URL || 'http://google.com'
     },
     getAccountType(shouldUseOnlineAccount) {
       if (shouldUseOnlineAccount) {

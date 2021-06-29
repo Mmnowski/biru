@@ -5,6 +5,7 @@
         <v-card-title class="headline">
           Welcome to the Vuetify + Nuxt.js template
         </v-card-title>
+        <camera-feed />
         <v-card-text>
           <p>
             Vuetify is a progressive Material Design component framework for
@@ -76,5 +77,4 @@
   </v-row>
 </template>
 
-<script>
-</script>
+<script></script>

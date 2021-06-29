@@ -9,7 +9,9 @@
             ></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title class="title">{{ user.email }}</v-list-item-title>
+            <v-list-item-title class="title">{{
+              user ? user.email : 'Guest'
+            }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
