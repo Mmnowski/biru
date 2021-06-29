@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const vision = require('@google-cloud/vision')
+const { decode } = require('base64-arraybuffer');
 
 const router = Router()
 
@@ -8,10 +9,12 @@ router.post('/ocr/upload', async function (req, res) {
 
   const request = {
     image: {
-      content: Buffer.from(req.body.imageBase64, 'base64'),
+      content: decode(req.body.image),
     },
+    features: [{ type: 'TEXT_DETECTION' }],
   }
-  const [result] = await client.textDetection(request)
+  console.log(request)
+  const [result] = await client.annotateImage(request)
 
   return res.json({ data: result })
 })

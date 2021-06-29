@@ -35,19 +35,17 @@ export default {
     },
     async takePicture() {
       const { camera, context, canvas, photo, width, height } = this.videoCam
-      let { image, imageBase64 } = this.videoCam
+      let { image } = this.videoCam
       if (width && height) {
         canvas.width = width
         canvas.height = height
         context.drawImage(camera, 0, 0, width, height)
 
-        imageBase64 = canvas.toDataURL()
-
         image = canvas.toDataURL('image/png')
         photo.setAttribute('src', image)
 
         console.log(
-          (await this.$axios.$post('/api/ocr/upload', { imageBase64 })).data
+          (await this.$axios.$post('/api/ocr/upload', { image })).data
         )
       } else {
         this.clearPhoto()
@@ -55,19 +53,18 @@ export default {
     },
     clearPhoto() {
       const { context, canvas, photo } = this.videoCam
-      let { image, imageBase64 } = this.videoCam
+      let { image } = this.videoCam
       context.fillStyle = '#AAA'
       context.fillRect(0, 0, canvas.width, canvas.height)
 
       image = canvas.toDataURL('image/png')
-      imageBase64 = canvas.toDataURL()
       photo.setAttribute('src', image)
     },
     createVideoData() {
       const canvas = this.$refs.canvas
       this.videoCam = {
-        width: 500,
-        height: 375,
+        width: 1024,
+        height: 768,
         canvas,
         photo: this.$refs.photo,
         camera: this.$refs.camera,
@@ -87,13 +84,13 @@ export default {
 <style scoped>
 .camera {
   margin: 0 auto;
-  width: 500px;
-  height: 375px;
+  width: 1024px;
+  height: 768px;
   border: 10px #333 solid;
 }
 .camera__component {
-  width: 500px;
-  height: 375px;
+  width: 1024px;
+  height: 768px;
   background-color: #666;
 }
 </style>
